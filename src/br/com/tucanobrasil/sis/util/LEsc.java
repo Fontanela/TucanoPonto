@@ -171,6 +171,15 @@ import javax.swing.JTextField;
      }
    return r;
    }
+	public static double STD(String arg){ //STRING TO DOUBLE
+	if(arg.length() == 0) { return 0; }
+	return Double.parseDouble(arg.replace(",", "."));
+	}
+	
+	public static int STI(String arg){ //STRING TO INTEGER
+	if(arg.length() == 0) { return 0; }
+	return Integer.valueOf(arg);
+}
    
    public static ArrayList<String> strPArr(String str) {
      String[] dados = str.split("\001", -1);
