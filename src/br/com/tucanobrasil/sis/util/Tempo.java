@@ -8,25 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
- 
 
- 
-
- 
-
- 
-
- 
-
- 
-
- 
-
- 
-
- 
-
- 
 
  public class Tempo
 
@@ -208,25 +190,49 @@ import java.util.Date;
 
    
 
-   public static String calcLisHoras(String[] lis) {
+	public static String calcHoursList(String[] lis){
 
-     String[] arrayOfString1 = lis;int j = lis.length; for (int i = 0; i < j; i++) { String hhmm = arrayOfString1[i];
+		int sum = 0;
 
-      if ((hhmm != null) && (!hhmm.equals(null))) {
+		for(String hhmm : lis){
 
-         try {         }
+			if(hhmm != null && !hhmm.equals(null)){
 
-         catch (NumberFormatException localNumberFormatException) {}
+				 String[] split = hhmm.split(":");
 
-       }}
+				 try {
 
+					 int mins = Integer.valueOf(split[ 0 ]) * 60 + Integer.valueOf( split[ 1 ] );
 
+					 sum += mins;
 
-				return null;     }
+				 }
 
-     
+				 catch(NumberFormatException e) {
 
- 
+					 //System.err.println(hhmm.charAt(1));
+
+				 }
+
+				// sum += mins;
+
+			}
+
+		}
+
+		
+
+		String min = "" + ( sum % 60); min = min.replace("-", "");
+
+		String formattedWorkingTime = (int)Math.floor(sum/60) + ":" + min;
+
+		
+
+		return formattedWorkingTime;
+
+	}
+
+	
 
  
 
@@ -291,6 +297,8 @@ import java.util.Date;
    }
 
    
+
+
 
    public static String[] splitData(String data) {
 
@@ -400,6 +408,16 @@ import java.util.Date;
 
    }
 
+   
+   public static String extensoData() {
+
+	    DateFormat dateFormat = new SimpleDateFormat("EEEE, dd 'de' MMMM");
+
+	    Date date = new Date();
+
+	     return dateFormat.format(date);
+
+	   }
    
 
    public static String shortbrdata() {

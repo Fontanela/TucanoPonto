@@ -9,12 +9,6 @@ import java.util.ArrayList;
 import br.com.tucanobrasil.M;
  
  
- 
- 
- 
- 
- 
- 
  public class Util
  {
    public static ArrayList<String> addRangeToArr(ArrayList<String> arr, ArrayList<String> arr2, int c, int f)
@@ -59,12 +53,20 @@ import br.com.tucanobrasil.M;
      }
    }
    
-   public static void openChrome(String file) {
-     try {
-       Runtime.getRuntime().exec(new String[] { "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", M.SYSDIR + "\\" + file });
-     } catch (IOException e) {
-       e.printStackTrace();
-     }
-   }
+	public static void openChrome(String file){
+		try {
+			String os = System.getProperty("os.name");
+			
+			if(os.equals("Linux")) {
+				Runtime.getRuntime().exec(new String[] {"bash", "-c", "google-chrome " + M.SYSDIR + "/" + file});
+			}
+			else {
+				Runtime.getRuntime().exec(new String[] {"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", M.SYSDIR + "\\" + file});
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
  }
 

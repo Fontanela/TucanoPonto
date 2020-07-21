@@ -26,13 +26,15 @@ import br.com.tucanobrasil.sis.util.LEsc;
    public static String PHPSESSID = null;
    public static String DEST = null;
    private static Scanner scanner;
+   public static int PCKTLOG = 0;
+
    
    @SuppressWarnings("rawtypes")
 public static void setPHPSESSID()
    {
      try
      {
-      URL authUrl = new URL(M.LNK + "/pon_servidor.php");
+      URL authUrl = new URL(M.LNK + "/server.php");
       HttpURLConnection authCon = (HttpURLConnection)authUrl.openConnection();
        try
        {
@@ -40,7 +42,7 @@ public static void setPHPSESSID()
        }
        catch (ConnectException e)
        {
-         Ig.erro("Não há...");
+         Ig.err("Não há conexão com o servidor");
         System.exit(0);
        }
       StringBuilder sb = new StringBuilder();
@@ -69,8 +71,21 @@ List<String> cookies = (List)authCon.getHeaderFields().get("Set-Cookie");
      }
    }
    
+	public static String post(String header, String packet) { return httpPost(header + "" + packet); }
+
+   
    public static String httpPost(String dados)
    {
+   if(PCKTLOG == 1) {
+		System.out.println("SENDED: --------");
+		System.out.println();
+		
+		
+		System.out.println(dados);
+		System.out.println();
+		System.out.println();
+	}
+	   
      dados = "pac=" + dados;
      try
      {
@@ -96,6 +111,14 @@ List<String> cookies = (List)authCon.getHeaderFields().get("Set-Cookie");
       for (int c = x.read(); c != -1; c = x.read()) {
          res = res + (char)c;
        }
+      
+      if(PCKTLOG == 1) {
+			System.out.println("-------- RECEIVED:");
+			System.out.println();
+			System.out.println(res);
+			System.out.println();
+			System.out.println();
+		}
       x.close();
        return res;
      }

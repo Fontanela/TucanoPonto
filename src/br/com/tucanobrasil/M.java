@@ -1,9 +1,10 @@
 package br.com.tucanobrasil;
-
 //Bibliotecas
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,121 +19,227 @@ import br.com.tucanobrasil.sis.rede.Rede;
 import br.com.tucanobrasil.sis.util.Arquivo;
 import br.com.tucanobrasil.sis.util.Ig;
 
-//CriaÁ„o da classe "M"
+//Cria√ß√£o da classe "M"
+
 	public class M{
-	
-		//DeclaraÁ„o das Variaveis/Atributos
+
+		//Declara√ß√£o das Variaveis/Atributos
 		   public static String LNK = "";
 		   public static KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		   public static String SYSDIR = System.getProperty("user.dir");
-	  
+		   public static KeyboardFocusManager MANAGERII = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		   public static String SYSDIR = System.getProperty("user.dir");  
 		   public static final String TIT = "TucPonto - ";
 		   public static int VERSAO = 333;
 		   public static String STRVER = "3.0.5";
 		   public static String CNAME = "tucpon.jar";
-		  
 		   public static final String NOMEDOWN = "tucpon.zip";
 		   public static String ID = "";
-	  
-		//MÈtodo que inicia o sistema
+
+		//M√©todo que inicia o sistema
+
 			   public static void main(String[] args) {
-			   
-			   //LanÁando o gerenciador de interface
-				     try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-				    } catch (ClassNotFoundException e) {
-				      e.printStackTrace();
-				    } catch (InstantiationException e) {
-				      e.printStackTrace();
-				    } catch (IllegalAccessException e) {
-				       e.printStackTrace();
-				    } catch (UnsupportedLookAndFeelException e) {
-				       e.printStackTrace();
-				    }
+
+				 //Gerenciador java
+
+					try {
+
+						
+
+						//Verifica√ß√£o do sistema operacional que est√° em uso
+
+							String os = System.getProperty("os.name");
+
+						
+
+						/*Se o sistema operacional for linux ele usar o look and feel GTK, padr√£o do linux	
+
+						  Se n√£o, usa o look and fell padr√£o da m√°quina windows em que estiver*/ 
+
+							/*if(os.equals("Linux")) {
+
+								UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+
+							}
+
+							else {*/
+
+								UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+
+							//}
+
+			
+
+					} catch (ClassNotFoundException e) {
+
+						e.printStackTrace();
+
+					} catch (InstantiationException e) {
+
+						e.printStackTrace();
+
+					} catch (IllegalAccessException e) {
+
+						e.printStackTrace();
+
+					} catch (UnsupportedLookAndFeelException e) {
+
+						e.printStackTrace();
+
+					}
+
 				    
+
 				     UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+
 				    if (defaults.get("Table.alternateRowColor") == null) {
+
 				       defaults.put("Table.alternateRowColor", new Color(206, 206, 206));
+
 				    }
+
 				    
+
 				    UIManager.put("Button.font", new Font("Arial", 1, 14));
+
 				    UIManager.put("MenuBar.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("MenuItem.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("Menu.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("PopupMenu.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("OptionPane.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("Panel.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("Viewport.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("TabbedPane.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("Table.font", new Font("Arial", 0, 17));
+
 				    UIManager.put("TableHeader.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("TextField.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("ComboBox.font", new Font("Arial", 1, 14));
+
 				    UIManager.put("PasswordField.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("TextArea.font", new Font("Arial", 0, 14));
+
 				    UIManager.put("TextPane.font", new Font("Arial", 0, 14));
+
 			    
-				//Conex„o com o servidor
-				    LNK = (String)Arquivo.ler("cfg.ini").get(0);
-			    
-				    //Checa a vers„o do software
+
+				//Conex√£o com o servidor
+				    LNK = (String)Arquivo.ler("cfg.ini").get(0);			    
+
+				    //Checa a vers√£o do software
 					    Rede.setPHPSESSID();
 					    Rede.DEST = "cvs_server.php";
-					    
 					    String versao = Rede.httpPost("CVI" + VERSAO + ";1");
-					     System.out.println("CVI" + VERSAO + ";1");
 					     if (versao.substring(0, 3).equals("VOB")) {
-					      if (Ig.duvida("O sistema precisa ser atualizado, deseja prosseguir agora?")) {
+
+					      if (Ig.doubt("O sistema precisa ser atualizado, deseja prosseguir agora?")) {
 					         String tamanho = versao.substring(3);
-					      new Atualizacao();
+					         new Atualizacao();
 					        
 					         downAtua(LNK + "/releases/" + "tucpon.zip", "tucpon.zip", Double.parseDouble(tamanho));
 					         return;
 					      }
-					      
+
 					      return;
 					    }
-					    
-				    //Destino da rede
-					     Rede.DEST = "pon_servidor.php";
-					     String hAt = Rede.httpPost("PHA");
-					     try {
-					       Runtime.getRuntime().exec("cmd /c time " + hAt);
-					     } 
-					     catch (IOException e) {
-					     e.printStackTrace();
-					     }
-			    
+
+					     Rede.DEST = "server.php";
+					     
+					   //Cria√ß√£o do m√©todo de gerenciamento de teclas
+							M.MANAGERII.addKeyEventDispatcher(new KeyEventDispatcher() {
+								public boolean dispatchKeyEvent(KeyEvent e) { 
+									if (e.getID() == KeyEvent.KEY_RELEASED) {					
+										if(e.getKeyCode() == KeyEvent.VK_F11){
+											if(Rede.PCKTLOG == 0) {
+												Rede.PCKTLOG = 1;
+												System.err.println("PACKETLOGGER ACTIVATED");
+											}
+											else {
+												Rede.PCKTLOG = 0;
+												System.err.println("PACKETLOGGER DEACTIVATED");
+											}
+										}
+									}
+									return false;
+								}
+							});
+					     
 			//Inicia a tela de login
 			    new Login();
+
 			  }
+
 			   
-		  //MÈtodo que atualiza o sistema
+
+		  //M√©todo que atualiza o sistema
+
 			public static void downAtua(String site, String file, double bytes){
+
 			    try {
+
 			       URL url = new URL(site);
+
 			       InputStream in = url.openStream();
+
 			      
+
 			       FileOutputStream fos = new FileOutputStream(new File(file));
+
 			      
+
 			       int length = -1;
-			       byte[] buffer = new byte['»'];
+
+			       byte[] buffer = new byte['ÔøΩ'];
+
 			      
+
 				   int size = 0;
+
 				   while ((length = in.read(buffer)) > -1) {
+
 					   	fos.write(buffer, 0, length);
+
 					    size += length;
+
 					        
+
 					    double f = size / bytes * 100.0D;
+
 					        
+
 					    Atualizacao.percent = (int)f;
+
 				   }
+
 				   
+
 				   fos.close();
+
 				   in.close();
+
 			    } 
+
 			    catch (IOException e) {
+
 			    	e.printStackTrace();
+
 			    }
+
 			  }
+
+			//Fim do m√©todo "downAtua"
+
 	}
+
+//Fim da classe
 

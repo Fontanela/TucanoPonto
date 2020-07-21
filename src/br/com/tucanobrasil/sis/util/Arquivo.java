@@ -1,11 +1,15 @@
  package br.com.tucanobrasil.sis.util;
  
  import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
  
  
@@ -19,37 +23,21 @@ import java.util.ArrayList;
      }
    }
    
-   public static void gerRel(String nome, String[] infos) {
-     ArrayList<String> arq = ler("modelo.html");
-    String con = LEsc.arrPStr(arq);
-     con = con.replace("#func", nome);
-     
-     String add = "";
-     String[] lisH = new String[infos.length / 8];
-   for (int i = 0; i < infos.length; i += 8)
-     {
-       add = add + "<tr><td>" + infos[i] + "</td><td>" + infos[(i + 1)] + "</td><td>" + infos[(i + 2)] + "</td><td>" + infos[(i + 3)] + "</td><td>" + infos[(i + 4)] + "</td><td>" + infos[(i + 5)] + "</td><td>" + infos[(i + 6)] + "</td><td>" + infos[(i + 7)] + "</td></tr>";
-       
- 
-     if (!infos[(i + 5)].equals("")) {
-         lisH[(i / 8)] = infos[(i + 5)];
-       }
-     }
-     String tot = Tempo.calcLisHoras(lisH);
-     
-    con = con.replace("#infos", add);
-    con = con.replace("#total", tot);
-     
-    sobEsc("relatorios/" + nome, null);
-     
-    standardFile("relatorios/" + nome + "/2018-03-01.html", con);
-   }
-   
+   public static void standardFile(String caminho, String cont){
+		Writer writer = null;
 
-   public static void standardFile(String caminho, String cont)
-   {     
-   }
-   
+		try {
+		    writer = new BufferedWriter(new OutputStreamWriter(
+		          new FileOutputStream(caminho), "UTF-8"));
+		    writer.write(cont);
+		    writer.flush();
+		    writer.close();
+		} catch (IOException ex) {
+		    // Report
+		} finally {
+		   try {writer.close();} catch (Exception ex) {/*ignore*/}
+		}
+	}
    public static void sobEsc(String caminho, String cont)
    {
      File fold = new File(caminho);
